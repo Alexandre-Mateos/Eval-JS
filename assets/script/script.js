@@ -4,6 +4,7 @@ let authorInput = document.querySelector("#quote-author");
 let quoteTypeInput = document.querySelector("#quote-type");
 let quoteList = document.querySelector("#quote-list");
 let errorMsg = document.querySelector("#error-msg");
+let dailyQuote = document.querySelector("#daily-quote");
 
 /**
  * On vérifie si le tableau de stockage existe déjà pour éviter de l'écraser au rechargement de la page.
@@ -16,14 +17,19 @@ if (!localStorage.getItem("collection-citations")) {
 
   localStorage.setItem("collection-citations", quoteCollection);
 }else{
-    numberOfSavedQuotes ();
+    let myCryptedQuotes = localStorage.getItem("collection-citations");
+    let myQuotes = JSON.parse(myCryptedQuotes);
+
+    numberOfSavedQuotes(myQuotes);
+    randomQuote(myQuotes);
+
+
 }
 
 form.addEventListener("submit", (e) => {
   // empêche le rafraichissement automatique de la page
   e.preventDefault();
 
-  quoteList.innerHTML = "";
   // récupère les valeurs des inputs
   let quoteText = quoteTextInput.value;
   let quoteAuthor = authorInput.value;
@@ -33,7 +39,7 @@ form.addEventListener("submit", (e) => {
   if (quoteText && quoteAuthor) {
     let newQuote = createThisQuote(quoteText, quoteAuthor, quoteType);
     pushQuoteToCollection(newQuote);
-    
+
   } else {
     let paraErrorMsg = document.createElement("p");
     paraErrorMsg.innerHTML =
@@ -52,12 +58,13 @@ function createThisQuote(text, author, type) {
     author: author,
     type: type,
   };
+  displayCardQuotes(myQuote);
   return myQuote;
 }
 
 /**
  * Récupère le tableau encodé (crée au début du script sous condition qu'il n'éxiste pas déjà), et le décode pour y ajouter l'objet
- * citation nouvellement crée. Appel la fonction displayQuote pour afficher les cartes au même moment
+ * citation nouvellement crée.
  */
 function pushQuoteToCollection(newQuote) {
   let collectionEncoded = localStorage.getItem("collection-citations");
@@ -66,31 +73,33 @@ function pushQuoteToCollection(newQuote) {
 
   collectionDecoded.push(newQuote);
 
-  displayQuote(collectionDecoded);
-
   let collectionReEncoded = JSON.stringify(collectionDecoded);
   localStorage.setItem("collection-citations", collectionReEncoded);
 }
 
-// Affiche les cartes stockées dans la collection sauveagrdé dans le localStorage. Ajout d'un event Listener au click pour supprimer la carte du DOM
-function displayQuote(collection) {
-  for (let i = 0; i < collection.length; i++) {
+
+/**
+ * Ajout d'une nouvelle carte dans la liste à la soumission du formulaire. Ajout d'un bouton et d'un eventListener sur ce bouton pour
+ * pouvoir supprimer la carte de la liste.
+ */
+function displayCardQuotes(quote){
     let quoteCard = document.createElement("div");
     quoteCard.classList.add("card");
 
     let paraTextQuote = document.createElement("p");
-    paraTextQuote.innerHTML = collection[i].text;
+    paraTextQuote.innerHTML = quote.text;
 
     let paraAuthorQuote = document.createElement("p");
-    paraAuthorQuote.innerHTML = `Auteur : ${collection[i].author}`;
+    paraAuthorQuote.innerHTML = `Auteur : ${quote.author}`;
 
     let paraTypeQuote = document.createElement("p");
-    paraTypeQuote.innerHTML = `Catégorie : ${collection[i].type}`;
+    paraTypeQuote.innerHTML = `Catégorie : ${quote.type}`;
 
     let deleteButton = document.createElement("button");
     deleteButton.innerHTML = "Effacer";
     deleteButton.addEventListener("click", () => {
       quoteCard.remove();
+      
     });
 
     quoteCard.insertAdjacentElement("beforeend", paraTextQuote);
@@ -98,15 +107,22 @@ function displayQuote(collection) {
     quoteCard.insertAdjacentElement("beforeend", paraTypeQuote);
     quoteCard.insertAdjacentElement("beforeend", deleteButton);
     quoteList.insertAdjacentElement("beforeend", quoteCard);
-  }
 }
 
+
 // Affiche le nombre de citation sauvegardées dans le local storage.
-function numberOfSavedQuotes (){
-    let myCryptedQuotes = localStorage.getItem("collection-citations");
-    let myQuotes = JSON.parse(myCryptedQuotes);
-    
+function numberOfSavedQuotes (quoteTab){
     let paraNumberQuote = document.createElement("p");
-    paraNumberQuote.innerHTML = `Citations enregistrées : ${myQuotes.length}`;
+    paraNumberQuote.innerHTML = `Citations enregistrées : ${quoteTab.length}`;
     quoteList.insertAdjacentElement("beforeend", paraNumberQuote);
 }
+
+function randomQuote(quoteTab){
+    let randomIndex = Math.floor( Math.random()*quoteTab.length);
+
+    let paraRandomQuote = document.createElement("p");
+    paraRandomQuote.innerHTML = quoteTab[randomIndex]
+
+    console.log(randomIndex);
+}
+
