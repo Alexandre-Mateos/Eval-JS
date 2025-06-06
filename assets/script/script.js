@@ -76,9 +76,17 @@ function displayQuote(collection){
         let paraTypeQuote = document.createElement("p");
         paraTypeQuote.innerHTML = `Catégorie : ${collection[i].type}`;
 
+        let deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Effacer";
+        deleteButton.addEventListener("click", () => {
+            quoteCard.remove();
+            
+        } )
+
         quoteCard.insertAdjacentElement("beforeend", paraTextQuote);
         quoteCard.insertAdjacentElement("beforeend", paraAuthorQuote);
         quoteCard.insertAdjacentElement("beforeend",paraTypeQuote);
+        quoteCard.insertAdjacentElement("beforeend", deleteButton);
         quoteList.insertAdjacentElement("beforeend",quoteCard);
     }
 }
