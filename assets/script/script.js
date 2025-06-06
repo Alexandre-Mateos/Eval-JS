@@ -25,9 +25,13 @@ if (!localStorage.getItem("collection-citations")) {
 
     // citation aléatoire seulement si il y en a au moins une de stockée
     if( myQuotes.length>0){
+
+        let quoteOfTheDay = document.createElement("h2");
+        quoteOfTheDay.innerHTML = `Citation du jour`
+        quoteOfTheDay.classList.add("fs-3", "text-center");
+        dailyQuote.insertAdjacentElement("beforeend", quoteOfTheDay);
+
         let randomIndex = Math.floor( Math.random()*myQuotes.length);
-        console.log(myQuotes.length)
-        console.log(randomIndex);
         displayCardQuotes(myQuotes[randomIndex]);
     }
 }
@@ -91,12 +95,15 @@ function pushQuoteToCollection(newQuote) {
  * pouvoir supprimer la carte de la liste.
  */
 function displayCardQuotes(quote){
+
+
+
     let quoteCard = document.createElement("div");
     quoteCard.classList.add("card", "card-body", "ma-carte");
 
     let paraTextQuote = document.createElement("p");
     paraTextQuote.innerHTML = quote.text;
-    paraTextQuote.classList.add("card-title");
+    paraTextQuote.classList.add("card-title", "text-center");
 
     let paraAuthorQuote = document.createElement("p");
     paraAuthorQuote.innerHTML = `Auteur : ${quote.author}`;
@@ -107,7 +114,7 @@ function displayCardQuotes(quote){
     paraTextQuote.classList.add("card-text");
 
     let deleteButton = document.createElement("button");
-    deleteButton.classList.add("btn", "btn-danger");
+    deleteButton.classList.add("btn", "btn-danger", "mon-bouton");
     deleteButton.innerHTML = "Effacer";
     deleteButton.addEventListener("click", () => {
       quoteCard.remove();
@@ -125,8 +132,9 @@ function displayCardQuotes(quote){
 // Affiche le nombre de citation sauvegardées dans le local storage.
 function numberOfSavedQuotes (quoteTab){
     let paraNumberQuote = document.createElement("p");
+    paraNumberQuote.classList.add("text-center");
     paraNumberQuote.innerHTML = `Citations enregistrées : ${quoteTab.length}`;
-    quoteList.insertAdjacentElement("beforeend", paraNumberQuote);
+    dailyQuote.insertAdjacentElement("beforebegin", paraNumberQuote);
 }
 
 
