@@ -92,18 +92,22 @@ function pushQuoteToCollection(newQuote) {
  */
 function displayCardQuotes(quote){
     let quoteCard = document.createElement("div");
-    quoteCard.classList.add("card");
+    quoteCard.classList.add("card", "card-body", "ma-carte");
 
     let paraTextQuote = document.createElement("p");
     paraTextQuote.innerHTML = quote.text;
+    paraTextQuote.classList.add("card-title");
 
     let paraAuthorQuote = document.createElement("p");
     paraAuthorQuote.innerHTML = `Auteur : ${quote.author}`;
+    paraTextQuote.classList.add("card-text");
 
     let paraTypeQuote = document.createElement("p");
     paraTypeQuote.innerHTML = `Catégorie : ${quote.type}`;
+    paraTextQuote.classList.add("card-text");
 
     let deleteButton = document.createElement("button");
+    deleteButton.classList.add("btn", "btn-danger");
     deleteButton.innerHTML = "Effacer";
     deleteButton.addEventListener("click", () => {
       quoteCard.remove();
