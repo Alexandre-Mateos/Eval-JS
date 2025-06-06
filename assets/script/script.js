@@ -32,7 +32,7 @@ if (!localStorage.getItem("collection-citations")) {
         dailyQuote.insertAdjacentElement("beforeend", quoteOfTheDay);
 
         let randomIndex = Math.floor( Math.random()*myQuotes.length);
-        displayCardQuotes(myQuotes[randomIndex]);
+        displayCardQuotes(myQuotes[randomIndex],dailyQuote );
     }
 }
 
@@ -70,7 +70,7 @@ function createThisQuote(text, author, type) {
     author: author,
     type: type,
   };
-  displayCardQuotes(myQuote);
+  displayCardQuotes(myQuote, quoteList);
   return myQuote;
 }
 
@@ -94,9 +94,7 @@ function pushQuoteToCollection(newQuote) {
  * Ajout d'une nouvelle carte dans la liste à la soumission du formulaire. Ajout d'un bouton et d'un eventListener sur ce bouton pour
  * pouvoir supprimer la carte de la liste.
  */
-function displayCardQuotes(quote){
-
-
+function displayCardQuotes(quote, elementToAttach){
 
     let quoteCard = document.createElement("div");
     quoteCard.classList.add("card", "card-body", "ma-carte");
@@ -125,7 +123,7 @@ function displayCardQuotes(quote){
     quoteCard.insertAdjacentElement("beforeend", paraAuthorQuote);
     quoteCard.insertAdjacentElement("beforeend", paraTypeQuote);
     quoteCard.insertAdjacentElement("beforeend", deleteButton);
-    quoteList.insertAdjacentElement("beforeend", quoteCard);
+    elementToAttach.insertAdjacentElement("beforeend", quoteCard);
 }
 
 
