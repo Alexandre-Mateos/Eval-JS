@@ -12,18 +12,24 @@ let dailyQuote = document.querySelector("#daily-quote");
  *  */ 
 if (!localStorage.getItem("collection-citations")) {
   const collection = [];
-
   let quoteCollection = JSON.stringify(collection);
-
   localStorage.setItem("collection-citations", quoteCollection);
+
 }else{
+
+    // je récupère mon tableau du local storage et le décode(JSON.parse) pour l'utiliser dans les fonctions numberOfSavedQuotes et displayCardQuote
     let myCryptedQuotes = localStorage.getItem("collection-citations");
     let myQuotes = JSON.parse(myCryptedQuotes);
-
+    // nombre de citations sauvegardées
     numberOfSavedQuotes(myQuotes);
-    randomQuote(myQuotes);
 
-
+    // citation aléatoire seulement si il y en a au moins une de stockée
+    if( myQuotes.length>0){
+        let randomIndex = Math.floor( Math.random()*myQuotes.length);
+        console.log(myQuotes.length)
+        console.log(randomIndex);
+        displayCardQuotes(myQuotes[randomIndex]);
+    }
 }
 
 form.addEventListener("submit", (e) => {
@@ -39,6 +45,8 @@ form.addEventListener("submit", (e) => {
   if (quoteText && quoteAuthor) {
     let newQuote = createThisQuote(quoteText, quoteAuthor, quoteType);
     pushQuoteToCollection(newQuote);
+
+
 
   } else {
     let paraErrorMsg = document.createElement("p");
@@ -117,12 +125,4 @@ function numberOfSavedQuotes (quoteTab){
     quoteList.insertAdjacentElement("beforeend", paraNumberQuote);
 }
 
-function randomQuote(quoteTab){
-    let randomIndex = Math.floor( Math.random()*quoteTab.length);
-
-    let paraRandomQuote = document.createElement("p");
-    paraRandomQuote.innerHTML = quoteTab[randomIndex]
-
-    console.log(randomIndex);
-}
 
